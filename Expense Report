@@ -1,0 +1,44 @@
+Certainly! We can modify the script to allow user input for beginning prices, travel expenses, and distances. Here's an updated version:
+
+```python
+import matplotlib.pyplot as plt
+
+def get_user_input(prompt):
+    while True:
+        try:
+            value = float(input(prompt))
+            return value
+        except ValueError:
+            print("Please enter a valid numeric value.")
+
+# Get user input for destinations, distances, beginning prices, and travel expenses
+num_destinations = int(input("Enter the number of destinations: "))
+destinations = [input(f"Enter destination {i + 1}: ") for i in range(num_destinations)]
+distances = [get_user_input(f"Enter distance to {dest}: ") for dest in destinations]
+beginning_price = [get_user_input(f"Enter beginning price for {dest}: ") for dest in destinations]
+travel_expenses = [get_user_input(f"Enter travel expenses for {dest}: ") for dest in destinations]
+
+# Calculate adjusted beginning price and money used until final expense
+adjusted_beginning_price = [bp - te for bp, te in zip(beginning_price, travel_expenses)]
+money_used_until_final = [bp - te for bp, te in zip(beginning_price, travel_expenses[-1:])]
+
+# Create a pie chart
+plt.figure(figsize=(8, 8))
+plt.pie(distances, labels=destinations, autopct='%1.1f%%', startangle=140)
+plt.title('Travel Distances')
+plt.show()
+
+# Display breakdown of beginning price minus travel expenses
+for dest, bp, te, adj_price, mu in zip(destinations, beginning_price, travel_expenses, adjusted_beginning_price, money_used_until_final):
+    print(f'{dest}:')
+    print(f'  Beginning Price: ${bp}')
+    print(f'  Travel Expenses: ${te}')
+    print(f'  Adjusted Beginning Price: ${adj_price}')
+    print(f'  Money Used Until Final Expense: ${mu}\n')
+
+# Display total money used
+total_money_used = sum(money_used_until_final)
+print(f'Total Money Used: ${total_money_used}')
+```
+
+Now, the script prompts the user to input the number of destinations, names of destinations, distances, beginning prices, and travel expenses. It then calculates the adjusted beginning prices, displays the breakdown, and shows the total money used.
